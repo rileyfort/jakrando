@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using Memory;
-// Randomizer created by Riley Fort and Taylor Berukoff
+
+// Randomizer created by Riley Fort, Taylor Berukoff and Witcher01
 namespace Ruhndomizer_v2
 {
     public partial class Form1 : Form
@@ -20,6 +21,10 @@ namespace Ruhndomizer_v2
         }
 
         public Mem m = new Mem();
+        // standard constructor already takes its seed from the current time
+        // instead of risking a same seed via multiple instantiatnuions, instantiate once and pull new values from the same object
+        private Random random = new Random();
+
 
         // Array for Address 207CB984
         string[] spawn = { "0x04 0x73", "0x04 0x53", "0xF4 0x0A", "0x74 0x54", "0x94 0xF2", "0x6C 0x54", "0xAC 0x22", "0x9C 0xF2", "0xF4 0xE2", "0x84 0x62", "0x64 0x54", "0xC4 0x92", "0x5C 0x92", "0x84 0x2A", "0x84 0x52", "0xBC 0x52", "0x04 0x53", "0xEC 0xF2", "0xBC 0x52" , "0xBC 0x52", "0xBC 0x52", "0xBC 0x52", "0x6C 0x54", "0x9C 0xF2", "0x9C 0xF2", "0x9C 0xF2", "0x9C 0xF2", "0x9C 0xF2", "0xF4 0xE2", "0xF4 0xE2", "0xF4 0xE2", "0xF4 0xE2", "0xF4 0xE2", "0xF4 0xE2", "0x84 0x62", "0x84 0x62", "0x64 0x54", "0xC4 0x92", "0xEC 0x22", "0xEC 0x22", "0xC4 0x92", "0x74 0x92", "0x84 0x2A", "0x84 0x2A", "0x84 0x2A", "0x84 0x2A", "0x84 0x2A", "0x84 0x2A", "0x84 0x2A", "0x84 0x2A", "0x5C 0x92", "0x5C 0x92", "0x5C 0x92"};
@@ -37,7 +42,7 @@ namespace Ruhndomizer_v2
         {
             while (true)
             {
-                int ID = m.getProcIDFromName("pcsx2");
+                int ID = m.GetProcIdFromName("pcsx2");
 
                 bool openProc = false;
 
@@ -48,13 +53,13 @@ namespace Ruhndomizer_v2
                 
                 if (openProc)
                 {
-                    float newCellCount = m.readFloat("0x20642D60"); // Reads current amount of collected cells.
-                    int newEcoType = m.readByte("0x20182848"); // Reads eco type.
-                    float oneHitKill = m.readFloat("0x20182860"); // Reads current big health.
+                    float newCellCount = m.ReadFloat("0x20642D60"); // Reads current amount of collected cells.
+                    int newEcoType = m.ReadByte("0x20182848"); // Reads eco type.
+                    float oneHitKill = m.ReadFloat("0x20182860"); // Reads current big health.
 
                     if (checkBox3.Checked == true) // If One Hit Kill checkbox is checked.
                     {
-                        m.writeMemory("0x20182860", "float", health[0]); // Write value 1 to big health address.
+                        m.WriteMemory("0x20182860", "float", health[0]); // Write value 1 to big health address.
                         System.Threading.Thread.Sleep(2000); // Wait 2 seconds before writing value 1 to big health address again.
                     }
 
@@ -62,41 +67,20 @@ namespace Ruhndomizer_v2
                     {
                         Random ran = new Random();
                         int num = ran.Next(4); // Generates random number up to 4.
-                        m.writeMemory("0x20182848", "byte", eco[num]); // Writes random value to the eco type address.
+                        m.WriteMemory("0x20182848", "byte", eco[num]); // Writes random value to the eco type address.
                         System.Threading.Thread.Sleep(1000); // Waits 1 second to change eco type.
                     }
 
-                    if (checkBox.Checked == true && checkBox1.Checked == true) // If both Cell randomizer checkboxes are checked...
+                    // Checks if the cell count went up.
+                    if (checkBox.Checked && !checkBox1.Checked && (newCellCount > cellCount || newCellCount > cellCount + 2))
                     {
-                        ; // Do nothing.
-                    }
-
-                    else
-                    {
-                        if (checkBox.Checked == true && checkBox1.Checked == false && newCellCount > cellCount) // Checks if the cell count went up.
-                        {
-                            Random ran = new Random();
-                            int num = ran.Next(52); // Generates a random number up to x.
-                            System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
-                            //m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
-                            m.writeMemory("0x2017A9F4", "float", "-2127581"); // Changes Y coordinate to out of bounds.
-                            m.writeMemory("0x207CB984", "bytes", spawn[num]); // Uses randomly genertated number to determine spawn value.
-                            m.writeMemory("0x20642D6C", "bytes", checkpoint[num]); // Uses randomly genertated number to determine checkpoint value.
-                            cellCount = newCellCount; // Updates static cell count to number of cells the player has.
-                        }
-                    
-
-                        if (checkBox1.Checked == true && checkBox.Checked == false && newCellCount > cellCount + 2) // Checks if the cell count went up by 3.
-                        {
-                            Random ran = new Random();
-                            int num = ran.Next(52); // Generates a random number up to x.
-                            System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
-                            // m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
-                            m.writeMemory("0x2017A9F4", "float", "-2127581"); // Changes Y coordinate to out of bounds.
-                            m.writeMemory("0x207CB984", "bytes", spawn[num]); // Uses randomly genertated number to determine spawn value.
-                            m.writeMemory("0x20642D6C", "bytes", checkpoint[num]); // Uses randomly genertated number to determine checkpoint value.
-                            cellCount = newCellCount; // Updates static cell count to number of cells the player has.
-                        }
+                        int num = random.Next(52); // Generates a random number up to x.
+                        System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
+                        //m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
+                        m.WriteMemory("0x2017A9F4", "float", "-2127581"); // Changes Y coordinate to out of bounds.
+                        m.WriteMemory("0x207CB984", "bytes", spawn[num]); // Uses randomly genertated number to determine spawn value.
+                        m.WriteMemory("0x20642D6C", "bytes", checkpoint[num]); // Uses randomly genertated number to determine checkpoint value.
+                        cellCount = newCellCount; // Updates static cell count to number of cells the player has.
                     }
                 }
             }
