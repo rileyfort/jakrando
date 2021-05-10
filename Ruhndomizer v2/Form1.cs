@@ -76,6 +76,9 @@ namespace Ruhndomizer_v2
                         if (checkBox.Checked == true && checkBox1.Checked == false && newCellCount > cellCount) // Checks if the cell count went up.
                         {
                             Random ran = new Random();
+                            index = random.Next(52);
+                            spawn = spawn.OrderBy(index).toArray();
+                            checkpoint = checkpoint.OrderBy(index).toArray();
                             int num = ran.Next(52); // Generates a random number up to x.
                             System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
                             //m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
@@ -89,6 +92,9 @@ namespace Ruhndomizer_v2
                         if (checkBox1.Checked == true && checkBox.Checked == false && newCellCount > cellCount + 2) // Checks if the cell count went up by 3.
                         {
                             Random ran = new Random();
+                            index = random.Next(52);
+                            spawn = spawn.OrderBy(index).toArray();
+                            checkpoint = checkpoint.OrderBy(index).toArray();
                             int num = ran.Next(52); // Generates a random number up to x.
                             System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
                             // m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
