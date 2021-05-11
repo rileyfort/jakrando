@@ -82,7 +82,7 @@ namespace Ruhndomizer_v2
                             {
                                 do
                                 {
-                                    index = ran.Next(52); // Generates random integer below 52
+                                    index = ranIndex.Next(52); // Generates random integer below 52
                                 } while (indexList.Contains(index)); // Loops until integer is not in the list
                                 indexList.Add(index); // Adds random integer to the list
                             }
@@ -97,7 +97,7 @@ namespace Ruhndomizer_v2
                             checkpoint = tempCheckpoint;
                             System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
                             Random ranNum = new Random(); //Random object for num
-                            num = ranNum.Next(52);
+                            int num = ranNum.Next(52);
                             //m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
                             m.writeMemory("0x2017A9F4", "float", "-2127581"); // Changes Y coordinate to out of bounds.
                             m.writeMemory("0x207CB984", "bytes", spawn[num]); // Uses randomly genertated number to determine spawn value.
@@ -115,7 +115,7 @@ namespace Ruhndomizer_v2
                             {
                                 do
                                 {
-                                    index = ran.Next(52); // Generates random integer below 52
+                                    index = ranIndex.Next(52); // Generates random integer below 52
                                 } while (indexList.Contains(index)); // Loops until integer is not in the list
                                 indexList.Add(index); // Adds random integer to the list
                             }
@@ -129,7 +129,7 @@ namespace Ruhndomizer_v2
                             spawn = tempSpawn;
                             checkpoint = tempCheckpoint;
                             Random ranNum = new Random(); //Random object for num
-                            num = ranNum.Next(52);
+                            int num = ranNum.Next(52);
                             System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
                             // m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
                             m.writeMemory("0x2017A9F4", "float", "-2127581"); // Changes Y coordinate to out of bounds.
