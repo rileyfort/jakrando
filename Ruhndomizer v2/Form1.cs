@@ -76,8 +76,28 @@ namespace Ruhndomizer_v2
                         if (checkBox.Checked == true && checkBox1.Checked == false && newCellCount > cellCount) // Checks if the cell count went up.
                         {
                             Random ran = new Random();
-                            int num = ran.Next(52); // Generates a random number up to x.
+                            List<int> indexList = new List<int>();
+                            int index;
+                            for(int i = 0; i < 52; i++) // Creates a list of random integers from 0-51
+                            {
+                                do
+                                {
+                                    index = ran.Next(52); // Generates random integer below 52
+                                } while (indexList.Contains(index)); // Loops until integer is not in the list
+                                indexList.Add(index); // Adds random integer to the list
+                            }
+                            string[] tempSpawn = new string[52];
+                            string[] tempCheckpoint = new string[52];
+                            for (int i = 0; i < 52; i++) // Shuffles the spawn and checkpoint arrays by the random index list
+                            {
+                                tempSpawn[i] = spawn[indexList[i]];
+                                tempCheckpoint[i] = checkpoint[indexList[i]];
+                            }
+                            spawn = tempSpawn;
+                            checkpoint = tempCheckpoint;
                             System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
+                            Random ranNum = new Random(); //Random object for num
+                            num = ranNum.Next(52);
                             //m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
                             m.writeMemory("0x2017A9F4", "float", "-2127581"); // Changes Y coordinate to out of bounds.
                             m.writeMemory("0x207CB984", "bytes", spawn[num]); // Uses randomly genertated number to determine spawn value.
@@ -88,8 +108,28 @@ namespace Ruhndomizer_v2
 
                         if (checkBox1.Checked == true && checkBox.Checked == false && newCellCount > cellCount + 2) // Checks if the cell count went up by 3.
                         {
-                            Random ran = new Random();
-                            int num = ran.Next(52); // Generates a random number up to x.
+                            Random ranIndex = new Random(); //Random object for index
+                            List<int> indexList = new List<int>();
+                            int index;
+                            for(int i = 0; i < 52; i++) // Creates a list of random integers from 0-51
+                            {
+                                do
+                                {
+                                    index = ran.Next(52); // Generates random integer below 52
+                                } while (indexList.Contains(index)); // Loops until integer is not in the list
+                                indexList.Add(index); // Adds random integer to the list
+                            }
+                            string[] tempSpawn = new string[52];
+                            string[] tempCheckpoint = new string[52];
+                            for (int i = 0; i < 52; i++) // Shuffles the spawn and checkpoint arrays by the random index list
+                            {
+                                tempSpawn[i] = spawn[indexList[i]];
+                                tempCheckpoint[i] = checkpoint[indexList[i]];
+                            }
+                            spawn = tempSpawn;
+                            checkpoint = tempCheckpoint;
+                            Random ranNum = new Random(); //Random object for num
+                            num = ranNum.Next(52);
                             System.Threading.Thread.Sleep(8000); // Waits for cell cutscene to finish.
                             // m.writeMemory("0x2017A9F8", "float", "1328623"); // Changes Z coordinate to out of bounds.
                             m.writeMemory("0x2017A9F4", "float", "-2127581"); // Changes Y coordinate to out of bounds.
